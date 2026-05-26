@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashish Kirana Projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f172a, #1e293b, #111827);
+      min-height: 100vh;
+    }
+
+    .glass {
+      backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px) scale(1.02);
+      transition: 0.3s ease;
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 glass shadow-xl">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+      <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide">
+          🛒 Ashish Kirana Digital Hub
+        </h1>
+
+        <p class="text-gray-300 mt-1 text-sm md:text-base">
+          Smart grocery store management & AI tools dashboard
+        </p>
+      </div>
+
+      <div class="flex gap-3 flex-wrap">
+        <button onclick="toggleTheme()"
+          class="bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded-xl font-semibold shadow-lg">
+          🌙 Toggle Theme
+        </button>
+
+        <button onclick="showTime()"
+          class="bg-green-600 hover:bg-green-700 px-5 py-2 rounded-xl font-semibold shadow-lg">
+          ⏰ Show Time
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-5 py-10 text-center">
+
+    <h2 class="text-4xl md:text-6xl font-black leading-tight">
+      Welcome to Your
+      <span class="text-indigo-400">Digital Store Ecosystem</span>
+    </h2>
+
+    <p class="text-gray-300 mt-5 max-w-3xl mx-auto text-lg leading-relaxed">
+      Manage your grocery store, borrowing records, AI pages, dashboards,
+      customer data, and future billing system from one professional homepage.
+    </p>
+
+    <div class="mt-8 flex justify-center gap-4 flex-wrap">
+      <a href="#projects"
+        class="bg-indigo-600 hover:bg-indigo-700 px-7 py-3 rounded-2xl font-bold text-lg shadow-xl">
+        🚀 Explore Projects
+      </a>
+
+      <a href="https://github.com/Yashraj0808"
+        target="_blank"
+        class="bg-white text-black hover:bg-gray-200 px-7 py-3 rounded-2xl font-bold text-lg shadow-xl">
+        💻 GitHub Profile
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="max-w-7xl mx-auto px-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+
+    <div class="glass rounded-3xl p-6 text-center shadow-xl">
+      <h3 class="text-gray-300">Projects</h3>
+      <p class="text-5xl font-black mt-2">5</p>
+    </div>
+
+    <div class="glass rounded-3xl p-6 text-center shadow-xl">
+      <h3 class="text-gray-300">Responsive</h3>
+      <p class="text-5xl font-black mt-2">100%</p>
+    </div>
+
+    <div class="glass rounded-3xl p-6 text-center shadow-xl">
+      <h3 class="text-gray-300">Free Hosting</h3>
+      <p class="text-5xl font-black mt-2">∞</p>
+    </div>
+
+    <div class="glass rounded-3xl p-6 text-center shadow-xl">
+      <h3 class="text-gray-300">Cloud Ready</h3>
+      <p class="text-5xl font-black mt-2">✓</p>
+    </div>
+  </section>
+
+  <!-- Search -->
+  <section class="max-w-7xl mx-auto px-5 mb-8">
+    <div class="glass rounded-3xl p-5 shadow-xl">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search your pages..."
+        onkeyup="searchProjects()"
+        class="w-full bg-transparent outline-none text-lg text-white placeholder-gray-400"
+      />
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="max-w-7xl mx-auto px-5 pb-16">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" id="projectGrid">
+
+      <!-- Project Card -->
+      <div class="project-card glass rounded-3xl overflow-hidden shadow-2xl card-hover">
+        <div class="p-6">
+          <div class="text-5xl mb-4">🛒</div>
+
+          <h3 class="text-2xl font-bold mb-2">Ashish Kirana Main</h3>
+
+          <p class="text-gray-300 leading-relaxed">
+            Main grocery management website for customer borrowing, payments,
+            dashboard and smart digital khata system.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="bg-indigo-500/30 px-3 py-1 rounded-full text-sm">HTML</span>
+            <span class="bg-green-500/30 px-3 py-1 rounded-full text-sm">Responsive</span>
+            <span class="bg-yellow-500/30 px-3 py-1 rounded-full text-sm">Dashboard</span>
+          </div>
+
+          <a href="ashishkirana.html"
+            class="mt-6 inline-block w-full text-center bg-indigo-600 hover:bg-indigo-700 py-3 rounded-2xl font-bold text-lg">
+            Open Project
+          </a>
+        </div>
+      </div>
+
+      <!-- ChatGPT -->
+      <div class="project-card glass rounded-3xl overflow-hidden shadow-2xl card-hover">
+        <div class="p-6">
+          <div class="text-5xl mb-4">🤖</div>
+
+          <h3 class="text-2xl font-bold mb-2">ChatGPT Page</h3>
+
+          <p class="text-gray-300 leading-relaxed">
+            Dedicated AI inspired webpage with modern responsive design and interactive UI.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="bg-indigo-500/30 px-3 py-1 rounded-full text-sm">AI</span>
+            <span class="bg-pink-500/30 px-3 py-1 rounded-full text-sm">Modern UI</span>
+          </div>
+
+          <a href="chatgpt.html"
+            class="mt-6 inline-block w-full text-center bg-indigo-600 hover:bg-indigo-700 py-3 rounded-2xl font-bold text-lg">
+            Open Project
+          </a>
+        </div>
+      </div>
+
+      <!-- Perplexity -->
+      <div class="project-card glass rounded-3xl overflow-hidden shadow-2xl card-hover">
+        <div class="p-6">
+          <div class="text-5xl mb-4">🔎</div>
+
+          <h3 class="text-2xl font-bold mb-2">Perplexity Page</h3>
+
+          <p class="text-gray-300 leading-relaxed">
+            Search engine inspired futuristic page with responsive glassmorphism design.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="bg-cyan-500/30 px-3 py-1 rounded-full text-sm">Search</span>
+            <span class="bg-teal-500/30 px-3 py-1 rounded-full text-sm">Glass UI</span>
+          </div>
+
+          <a href="perpelxity.html"
+            class="mt-6 inline-block w-full text-center bg-indigo-600 hover:bg-indigo-700 py-3 rounded-2xl font-bold text-lg">
+            Open Project
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-5 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+
+      <div>
+        <h3 class="font-bold text-xl">Ashish Kirana Digital Hub</h3>
+        <p class="text-gray-400 text-sm mt-1">
+          Built by Yashraj Nikam 🚀
+        </p>
+      </div>
+
+      <div class="text-gray-300 text-sm text-center md:text-right">
+        <p id="currentTime"></p>
+        <p>Responsive for Mobile & Desktop</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function showTime() {
+      const time = new Date().toLocaleString();
+      document.getElementById('currentTime').innerText = time;
+    }
+
+    setInterval(showTime, 1000);
+    showTime();
+
+    function searchProjects() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.project-card');
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(input)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('bg-white');
+      document.body.classList.toggle('text-black');
+    }
+  </script>
+
+</body>
+</html>
