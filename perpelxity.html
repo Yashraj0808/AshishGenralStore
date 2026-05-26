@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grocery Borrowing Records</title>
+<style>
+  :root{--bg:#f6f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--pri:#2563eb;--ok:#16a34a;--bad:#dc2626;--line:#e5e7eb}
+  *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+  header{background:linear-gradient(135deg,#1d4ed8,#0f766e);color:#fff;padding:22px 16px} header h1{margin:0 0 6px;font-size:24px} header p{margin:0;opacity:.92}
+  .wrap{max-width:1200px;margin:18px auto;padding:0 14px;display:grid;gap:16px}
+  .grid{display:grid;grid-template-columns:1fr 1.1fr;gap:16px} @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
+  h2{margin:0 0 12px;font-size:18px} label{display:block;font-size:13px;color:var(--muted);margin:10px 0 6px}
+  input,select,button,textarea{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:14px} textarea{min-height:70px;resize:vertical}
+  button{background:var(--pri);color:#fff;border:none;font-weight:700;cursor:pointer} button.secondary{background:#111827} button.good{background:var(--ok)} button.bad{background:var(--bad)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px} .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px} @media(max-width:640px){.row,.row3{grid-template-columns:1fr}}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px} @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}} @media(max-width:500px){.stats{grid-template-columns:1fr}}
+  .stat{background:#f9fafb;border:1px solid var(--line);border-radius:14px;padding:14px} .stat b{display:block;font-size:22px;margin-top:6px}
+  .tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}.tabs button{width:auto;padding:10px 14px;border-radius:999px;background:#e5e7eb;color:#111827}.tabs button.active{background:var(--pri);color:#fff}
+  .hidden{display:none} .customers{display:grid;gap:12px} .customer{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}
+  .customer-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap} .badge{padding:5px 10px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700}
+  table{width:100%;border-collapse:collapse;margin-top:10px} th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px} th{background:#f9fafb}
+  .actions{display:flex;gap:8px;flex-wrap:wrap} .actions button{width:auto}
+  .small{font-size:12px;color:var(--muted)} .footer{color:var(--muted);font-size:12px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Grocery Borrowing Records</h1>
+  <p>Free local sample app for customer credit, payments, and pending balance tracking.</p>
+</header>
+<div class="wrap">
+  <div class="stats">
+    <div class="stat">Customers<b id="statCustomers">0</b></div>
+    <div class="stat">Pending Dues<b id="statPending">₹0</b></div>
+    <div class="stat">Received<b id="statReceived">₹0</b></div>
+    <div class="stat">Borrowed<b id="statBorrowed">₹0</b></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>Add Customer</h2>
+      <div class="row">
+        <div><label>Name</label><input id="name" placeholder="Customer name"></div>
+        <div><label>Phone</label><input id="phone" placeholder="Phone number"></div>
+      </div>
+      <div class="row">
+        <div><label>Address</label><input id="address" placeholder="Optional address"></div>
+        <div><label>Notes</label><input id="notes" placeholder="Optional notes"></div>
+      </div>
+      <button onclick="addCustomer()">Add Customer</button>
+      <p class="footer">Data is saved in your browser using localStorage, so it works free and offline on this device.</p>
+      <hr style="border:none;border-top:1px solid var(--line);margin:16px 0">
+      <h2>Quick Search</h2>
+      <input id="search" placeholder="Search by name or phone" oninput="renderAll()">
+      <div class="actions" style="margin-top:10px">
+        <button class="secondary" onclick="exportData()">Export JSON</button>
+        <button class="secondary" onclick="importDemo()">Load Demo Data</button>
+        <button class="bad" onclick="resetData()">Clear All</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Record Credit / Payment</h2>
+      <div class="row">
+        <div><label>Customer</label><select id="customerSelect"></select></div>
+        <div><label>Type</label><select id="entryType"><option value="borrow">Borrow</option><option value="payment">Payment</option></select></div>
+      </div>
+      <div class="row3">
+        <div><label>Amount</label><input id="amount" type="number" min="0" step="0.01" placeholder="0"></div>
+        <div><label>Date</label><input id="date" type="date"></div>
+        <div><label>Due Date</label><input id="dueDate" type="date"></div>
+      </div>
+      <label>Details</label><textarea id="details" placeholder="Items, notes, or reason"></textarea>
+      <button onclick="addEntry()">Save Entry</button>
+      <p class="footer">Borrow increases balance, payment reduces balance. You can add multiple entries per customer.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="tabs">
+      <button class="active" onclick="setView('all', this)">All Customers</button>
+      <button onclick="setView('pending', this)">Pending Only</button>
+      <button onclick="setView('paid', this)">Fully Paid</button>
+    </div>
+    <div id="list" class="customers"></div>
+  </div>
+</div>
+<script>
+let state = JSON.parse(localStorage.getItem('grocery_borrowing_records') || '{"customers":[],"entries":[]}');
+let view = 'all';
+const money = n => '₹' + (Number(n||0).toFixed(2));
+const today = new Date().toISOString().slice(0,10);
+document.getElementById('date').value = today;
+
+function save(){ localStorage.setItem('grocery_borrowing_records', JSON.stringify(state)); }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function getBalances(){
+  return state.customers.map(c => {
+    const entries = state.entries.filter(e => e.customerId === c.id);
+    const borrowed = entries.filter(e => e.type === 'borrow').reduce((a,e)=>a+Number(e.amount),0);
+    const received = entries.filter(e => e.type === 'payment').reduce((a,e)=>a+Number(e.amount),0);
+    return {...c, borrowed, received, balance: borrowed - received, entries};
+  });
+}
+function addCustomer(){
+  const name = document.getElementById('name').value.trim();
+  if(!name) return alert('Enter customer name');
+  state.customers.push({id:uid(), name, phone:phone.value.trim(), address:address.value.trim(), notes:notes.value.trim()});
+  save(); ['name','phone','address','notes'].forEach(id=>document.getElementById(id).value=''); renderAll();
+}
+function addEntry(){
+  const cid = customerSelect.value, amount = Number(document.getElementById('amount').value);
+  if(!cid) return alert('Add/select a customer'); if(!amount || amount <= 0) return alert('Enter valid amount');
+  state.entries.push({id:uid(), customerId:cid, type:entryType.value, amount, date:date.value || today, dueDate:dueDate.value || '', details:details.value.trim()});
+  save(); document.getElementById('amount').value=''; document.getElementById('details').value=''; renderAll();
+}
+function setView(v, el){ view = v; document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderAll(); }
+function renderSelect(){
+  customerSelect.innerHTML = '<option value="">Select customer</option>' + state.customers.map(c=>`<option value="${c.id}">${c.name} ${c.phone ? '- ' + c.phone : ''}</option>`).join('');
+}
+function renderStats(data){
+  const borrowed = data.reduce((a,c)=>a+c.borrowed,0), received = data.reduce((a,c)=>a+c.received,0), pending = data.reduce((a,c)=>a+c.balance,0);
+  statCustomers.textContent = data.length; statBorrowed.textContent = money(borrowed); statReceived.textContent = money(received); statPending.textContent = money(pending);
+}
+function customerCard(c){
+  const rows = c.entries.sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(e => `<tr><td>${e.date||''}</td><td>${e.type}</td><td>${money(e.amount)}</td><td>${e.dueDate||''}</td><td>${e.details||''}</td></tr>`).join('');
+  return `<div class="customer"><div class="customer-top"><div><b>${c.name}</b><div class="small">${c.phone||''} ${c.address ? '• ' + c.address : ''}</div><div class="small">${c.notes||''}</div></div><div class="badge">Balance: ${money(c.balance)}</div></div><table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Due</th><th>Details</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="small">No entries yet</td></tr>'}</tbody></table></div>`;
+}
+function renderAll(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const data = getBalances().filter(c => !q || c.name.toLowerCase().includes(q) || (c.phone||'').toLowerCase().includes(q));
+  const filtered = data.filter(c => view === 'all' ? true : view === 'pending' ? c.balance > 0 : c.balance <= 0);
+  renderStats(filtered);
+  renderSelect();
+  list.innerHTML = filtered.length ? filtered.map(customerCard).join('') : '<div class="small">No customers found.</div>';
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'grocery-borrowing-records.json'; a.click();
+}
+function resetData(){ if(confirm('Clear all saved data from this browser?')){ state={customers:[],entries:[]}; save(); renderAll(); } }
+function importDemo(){
+  state={customers:[{id:'c1',name:'Asha',phone:'9876543210',address:'Ward 1',notes:'Regular customer'},{id:'c2',name:'Ramesh',phone:'9123456780',address:'Ward 2',notes:''}],entries:[{id:'e1',customerId:'c1',type:'borrow',amount:450,date:'2026-05-20',dueDate:'2026-05-30',details:'Rice, oil, tea'},{id:'e2',customerId:'c1',type:'payment',amount:200,date:'2026-05-22',dueDate:'',details:'Partial payment'},{id:'e3',customerId:'c2',type:'borrow',amount:300,date:'2026-05-21',dueDate:'2026-05-28',details:'Daily groceries'}]};
+  save(); renderAll();
+}
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashish Kirana & Genral Stores</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f0e8;
+    --surface: #fffdf7;
+    --surface2: #f0ebe0;
+    --border: #ddd5c0;
+    --border2: #c9bfa8;
+    --text: #1a1510;
+    --text2: #6b5f4e;
+    --text3: #9e9080;
+    --accent: #2d6a4f;
+    --accent-light: #d8f3dc;
+    --accent-text: #1b4332;
+    --red: #c0392b;
+    --red-light: #fde8e6;
+    --red-text: #7b241c;
+    --amber: #b7791f;
+    --amber-light: #fef3c7;
+    --amber-text: #7c5200;
+    --blue: #1a4e8a;
+    --blue-light: #dbeafe;
+    --blue-text: #1e3a5f;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  }
+
+  html, body { height: 100%; font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  /* ── LAYOUT ── */
+  .app-shell { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: 100vh; height: 100vh; overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .sidebar-brand { padding: 20px 18px 16px; border-bottom: 1px solid var(--border); }
+  .brand-icon { font-size: 28px; margin-bottom: 6px; }
+  .brand-name { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .brand-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+  .nav { padding: 12px 10px; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text2); margin-bottom: 2px; transition: all 0.15s; user-select: none; }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-light); color: var(--accent-text); }
+  .nav-item i { width: 18px; text-align: center; font-size: 15px; }
+  .nav-badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+  .sidebar-footer { padding: 14px; border-top: 1px solid var(--border); }
+  .store-stats { background: var(--surface2); border-radius: var(--radius); padding: 10px 12px; }
+  .store-stats-label { font-size: 10px; color: var(--text3); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .store-stats-val { font-size: 20px; font-weight: 700; color: var(--red); font-family: 'JetBrains Mono', monospace; }
+  .store-stats-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+  /* ── MAIN ── */
+  .main { display: flex; flex-direction: column; overflow: hidden; }
+  .topbar { padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .topbar-title { font-size: 16px; font-weight: 700; flex: 1; }
+  .search-wrap { position: relative; }
+  .search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 13px; }
+  .search-input { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px 8px 32px; font-size: 13px; font-family: 'Sora', sans-serif; width: 220px; outline: none; color: var(--text); }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(45,106,79,0.12); }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid transparent; font-family: 'Sora', sans-serif; transition: all 0.15s; }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #235c41; }
+  .btn-ghost { background: transparent; color: var(--text2); border-color: var(--border); }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+  .btn-red { background: var(--red); color: #fff; border-color: var(--red); }
+  .btn-red:hover { background: #a93226; }
+
+  /* ── CONTENT AREA ── */
+  .content-area { flex: 1; overflow-y: auto; padding: 20px; }
+
+  /* ── STAT CARDS ── */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; box-shadow: var(--shadow); }
+  .stat-card-label { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+  .stat-card-val { font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .stat-card-val.red { color: var(--red); }
+  .stat-card-val.green { color: var(--accent); }
+  .stat-card-val.amber { color: var(--amber); }
+  .stat-card-note { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* ── SECTION ── */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .section-title { font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── CUSTOMER TABLE ── */
+  .customer-table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+  .customer-table-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 120px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .th { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.4px; font-family: 'JetBrains Mono', monospace; }
+  .customer-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 120px; padding: 12px 16px; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; transition: background 0.1s; }
+  .customer-row:last-child { border-bottom: none; }
+  .customer-row:hover { background: var(--surface2); }
+  .customer-row.selected { background: var(--accent-light); }
+  .cust-name-cell { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .cust-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .cust-phone { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+  .td { font-size: 13px; color: var(--text2); }
+  .td.mono { font-family: 'JetBrains Mono', monospace; }
+  .td.red { color: var(--red); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .td.green { color: var(--accent); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .badge-overdue { background: var(--red-light); color: var(--red-text); }
+  .badge-ok { background: var(--accent-light); color: var(--accent-text); }
+  .badge-partial { background: var(--amber-light); color: var(--amber-text); }
+  .badge-new { background: var(--blue-light); color: var(--blue-text); }
+  .badge-cleared { background: var(--accent-light); color: var(--accent-text); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--text3); }
+  .empty-state i { font-size: 36px; margin-bottom: 12px; display: block; }
+  .empty-state p { font-size: 13px; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(26,21,16,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; width: 100%; max-width: 460px; box-shadow: var(--shadow-md); transform: translateY(12px); transition: transform 0.2s; }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .modal-title { font-size: 16px; font-weight: 700; }
+  .modal-close { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 18px; padding: 2px; }
+  .modal-close:hover { color: var(--text); }
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 5px; }
+  input, select, textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: 'Sora', sans-serif; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(45,106,79,0.10); }
+  textarea { resize: vertical; min-height: 70px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ── DETAIL PANEL (slide-in right) ── */
+  .detail-overlay { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+  .detail-overlay.open { pointer-events: all; }
+  .detail-backdrop { position: absolute; inset: 0; background: rgba(26,21,16,0.3); opacity: 0; transition: opacity 0.2s; }
+  .detail-overlay.open .detail-backdrop { opacity: 1; }
+  .detail-panel { position: absolute; right: 0; top: 0; bottom: 0; width: 380px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); box-shadow: -4px 0 20px rgba(0,0,0,0.10); }
+  .detail-overlay.open .detail-panel { transform: translateX(0); }
+  .detail-top { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .detail-avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+  .detail-name { font-size: 15px; font-weight: 700; }
+  .detail-phone { font-size: 12px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .detail-close { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--text3); font-size: 18px; }
+  .detail-close:hover { color: var(--text); }
+  .detail-balance { margin: 14px; padding: 12px 14px; background: var(--red-light); border-radius: var(--radius); border: 1px solid #f5c0bb; }
+  .detail-balance.zero { background: var(--accent-light); border-color: #a7d9b4; }
+  .detail-balance-label { font-size: 11px; color: var(--red-text); font-family: 'JetBrains Mono', monospace; }
+  .detail-balance.zero .detail-balance-label { color: var(--accent-text); }
+  .detail-balance-amount { font-size: 26px; font-weight: 700; color: var(--red); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .detail-balance.zero .detail-balance-amount { color: var(--accent); }
+  .detail-actions { padding: 0 14px 14px; display: flex; gap: 6px; }
+  .detail-actions .btn { flex: 1; justify-content: center; font-size: 12px; }
+  .detail-history { flex: 1; overflow-y: auto; padding: 0 14px 14px; }
+  .hist-label { font-size: 11px; font-weight: 600; color: var(--text3); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; }
+  .hist-entry { display: flex; align-items: flex-start; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); gap: 8px; }
+  .hist-entry:last-child { border-bottom: none; }
+  .hist-left { flex: 1; }
+  .hist-desc { font-size: 13px; color: var(--text); font-weight: 500; }
+  .hist-date { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .hist-note { font-size: 11px; color: var(--text3); margin-top: 2px; font-style: italic; }
+  .hist-amt { font-size: 14px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .hist-amt.borrow { color: var(--red); }
+  .hist-amt.pay { color: var(--accent); }
+  .hist-delete { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 13px; padding: 2px; opacity: 0; transition: opacity 0.1s; }
+  .hist-entry:hover .hist-delete { opacity: 1; }
+  .hist-delete:hover { color: var(--red); }
+
+  /* ── TOAST ── */
+  .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 200; display: flex; flex-direction: column; gap: 8px; }
+  .toast { background: var(--text); color: var(--surface); padding: 10px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; box-shadow: var(--shadow-md); animation: toastIn 0.2s ease; display: flex; align-items: center; gap: 8px; }
+  .toast.success { background: var(--accent); }
+  .toast.error { background: var(--red); }
+  @keyframes toastIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+  /* ── OVERDUE PAGE ── */
+  .overdue-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow); cursor: pointer; }
+  .overdue-card:hover { border-color: var(--border2); }
+  .overdue-info { flex: 1; }
+  .overdue-name { font-size: 14px; font-weight: 600; }
+  .overdue-days { font-size: 12px; color: var(--red); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .overdue-amount { font-size: 18px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--red); }
+
+  /* ── REPORTS PAGE ── */
+  .report-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .report-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+
+  /* ── AVATAR COLORS ── */
+  .av-1 { background: #dbeafe; color: #1e3a5f; }
+  .av-2 { background: #d8f3dc; color: #1b4332; }
+  .av-3 { background: #fef3c7; color: #7c5200; }
+  .av-4 { background: #fde8e6; color: #7b241c; }
+  .av-5 { background: #ede9fe; color: #3730a3; }
+  .av-6 { background: #fce7f3; color: #831843; }
+  .av-7 { background: #f0fdf4; color: #166534; }
+  .av-8 { background: #fff7ed; color: #9a3412; }
+
+  /* ── SCROLLBAR ── */
+  /* ── RESPONSIVE / MOBILE ── */
+@media (max-width: 768px) {
+  .app-shell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: 100dvh; }
+
+  .sidebar { flex-direction: row; border-right: none; border-bottom: 1px solid var(--border); height: auto; }
+  .sidebar-brand { display: none; }
+  .sidebar-footer { display: none; }
+  .nav { display: flex; flex-direction: row; padding: 6px 8px; overflow-x: auto; gap: 2px; }
+  .nav-item { flex-direction: column; gap: 3px; padding: 6px 10px; font-size: 10px; white-space: nowrap; min-width: 60px; text-align: center; }
+  .nav-item i { width: auto; font-size: 18px; }
+  .nav-badge { margin-left: 0; margin-top: 2px; }
+
+  .topbar { padding: 10px 12px; flex-wrap: wrap; gap: 8px; }
+  .topbar-title { font-size: 14px; width: 100%; }
+  .search-input { width: 160px; }
+
+  .content-area { padding: 12px; }
+
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stats-row .stat-card:last-child { grid-column: span 2; }
+
+  .customer-table-head { display: none; }
+  .customer-row { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 2px 8px; padding: 10px 12px; }
+  .customer-row .cust-name-cell { grid-column: 1; grid-row: 1; }
+  .customer-row .td:nth-child(2) { display: none; }
+  .customer-row .td:nth-child(3) { display: none; }
+  .customer-row .td.red, .customer-row .td.green { grid-column: 2; grid-row: 1; font-size: 14px; }
+  .customer-row .td:last-child { grid-column: 1; grid-row: 2; padding-left: 44px; }
+
+  .detail-panel { width: 100%; }
+
+  .modal { margin: 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; position: fixed; bottom: 0; left: 0; right: 0; max-width: 100%; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+
+  .form-row { grid-template-columns: 1fr; }
+
+  .overdue-card { flex-wrap: wrap; }
+}
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── HIDDEN ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── CONFIRM DIALOG ── */
+  .confirm-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+  .confirm-text { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+  /* ── WHATSAPP BTN ── */
+  .btn-wa { background: #25d366; color: #fff; border-color: #25d366; }
+  .btn-wa:hover { background: #1ebe5d; }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🛒</div>
+      <div class="brand-name">Ashish Kirana & General Stores</div>
+      <div class="brand-sub">Borrowing Records</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <i class="fa-solid fa-house"></i> Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('customers')" id="nav-customers">
+        <i class="fa-solid fa-users"></i> Customers
+      </div>
+      <div class="nav-item" onclick="showPage('overdue')" id="nav-overdue">
+        <i class="fa-solid fa-triangle-exclamation"></i> Overdue
+        <span class="nav-badge" id="overdue-badge">0</span>
+      </div>
+      <div class="nav-item" onclick="showPage('reports')" id="nav-reports">
+        <i class="fa-solid fa-chart-bar"></i> Reports
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="store-stats">
+        <div class="store-stats-label">Total outstanding</div>
+        <div class="store-stats-val" id="sidebar-total">₹0</div>
+        <div class="store-stats-sub" id="sidebar-count">0 active borrowers</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="search-wrap">
+        <i class="fa-solid fa-search"></i>
+        <input class="search-input" type="text" placeholder="Search customer…" id="search-input" oninput="handleSearch(this.value)">
+      </div>
+      <button class="btn btn-primary" onclick="openAddCustomerModal()">
+        <i class="fa-solid fa-plus"></i> Add Customer
+      </button>
+    </div>
+
+    <div class="content-area" id="content-area">
+      <!-- Pages rendered by JS -->
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- Add / Edit Customer -->
+<div class="modal-overlay" id="modal-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-customer-title">Add Customer</div>
+      <button class="modal-close" onclick="closeModal('modal-customer')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="field-name" placeholder="e.g. Rajan Kumar">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="field-phone" placeholder="98765 43210">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Address / Area</label>
+      <input type="text" id="field-address" placeholder="e.g. Near temple, Ward 4">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="field-notes" placeholder="Any notes about this customer…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-customer')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCustomer()">Save Customer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Borrow Entry -->
+<div class="modal-overlay" id="modal-borrow">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Borrow Entry</div>
+      <button class="modal-close" onclick="closeModal('modal-borrow')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount (₹) *</label>
+        <input type="number" id="borrow-amount" placeholder="0" min="1">
+      </div>
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" id="borrow-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description / Items</label>
+      <input type="text" id="borrow-desc" placeholder="e.g. Rice, dal, oil…">
+    </div>
+    <div class="form-group">
+      <label>Note (optional)</label>
+      <input type="text" id="borrow-note" placeholder="Any note…">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-borrow')">Cancel</button>
+      <button class="btn btn-red" onclick="saveBorrow()"><i class="fa-solid fa-plus"></i> Add Borrow</button>
+    </div>
+  </div>
+</div>
+
+<!-- Record Payment -->
+<div class="modal-overlay" id="modal-payment">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Record Payment</div>
+      <button class="modal-close" onclick="closeModal('modal-payment')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="form-group">
+      <label>Outstanding balance</label>
+      <input type="text" id="pay-outstanding" readonly style="background:var(--surface2); color:var(--red); font-weight:700;">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Payment Amount (₹) *</label>
+        <input type="number" id="pay-amount" placeholder="0" min="1">
+      </div>
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" id="pay-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Note (optional)</label>
+      <input type="text" id="pay-note" placeholder="Cash / UPI / etc.">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-payment')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePayment()"><i class="fa-solid fa-indian-rupee-sign"></i> Record Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete -->
+<div class="modal-overlay" id="modal-confirm">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <div class="modal-title">Confirm Delete</div>
+      <button class="modal-close" onclick="closeModal('modal-confirm')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="confirm-text" id="confirm-text">Are you sure?</p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm')">Cancel</button>
+      <button class="btn btn-red" id="confirm-ok-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DETAIL PANEL ═══════════════ -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-backdrop" onclick="closeDetail()"></div>
+  <div class="detail-panel">
+    <div class="detail-top">
+      <div class="detail-avatar" id="detail-avatar"></div>
+      <div>
+        <div class="detail-name" id="detail-name"></div>
+        <div class="detail-phone" id="detail-phone"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="detail-address"></div>
+      </div>
+      <button class="detail-close" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="detail-balance" id="detail-balance-box">
+      <div class="detail-balance-label">Outstanding balance</div>
+      <div class="detail-balance-amount" id="detail-balance-amount">₹0</div>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn-red" style="font-size:12px;" onclick="openBorrowModal()"><i class="fa-solid fa-plus"></i> Borrow</button>
+      <button class="btn btn-primary" style="font-size:12px;" onclick="openPaymentModal()"><i class="fa-solid fa-indian-rupee-sign"></i> Payment</button>
+      <button class="btn btn-wa" style="font-size:12px;" onclick="sendWhatsApp()"><i class="fa-brands fa-whatsapp"></i></button>
+      <button class="btn btn-ghost" style="font-size:12px;" onclick="editCustomer()"><i class="fa-solid fa-pencil"></i></button>
+      <button class="btn btn-ghost" style="font-size:12px;color:var(--red);" onclick="deleteCustomerConfirm()"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    <div style="padding:0 14px 8px; font-size:11px; color:var(--text3); font-style:italic;" id="detail-notes"></div>
+    <div class="detail-history" id="detail-history"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toasts"></div>
+
+<script>
+// ═══════════════ DATA LAYER ═══════════════
+const STORE_KEY = 'mama_store_v1';
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { customers: [] }; }
+  catch { return { customers: [] }; }
+}
+
+function saveData(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+let db = loadData();
+let currentCustomerId = null;
+let editingCustomerId = null;
+let currentPage = 'dashboard';
+let searchQuery = '';
+
+// ═══════════════ UTILITIES ═══════════════
+function fmt(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+}
+function avatarClass(name) {
+  const idx = (name.charCodeAt(0) + (name.charCodeAt(1)||0)) % 8 + 1;
+  return 'av-' + idx;
+}
+function getBalance(c) {
+  return (c.transactions || []).reduce((sum, t) => t.type === 'borrow' ? sum + t.amount : sum - t.amount, 0);
+}
+function daysSince(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return Math.floor((Date.now() - d.getTime()) / 86400000);
+}
+function lastBorrowDate(c) {
+  const borrows = (c.transactions || []).filter(t => t.type === 'borrow');
+  if (!borrows.length) return null;
+  return borrows.sort((a,b) => b.date.localeCompare(a.date))[0].date;
+}
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// ═══════════════ TOAST ═══════════════
+function toast(msg, type='') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check-circle':type==='error'?'fa-xmark-circle':'fa-circle-info'}"></i> ${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ═══════════════ NAVIGATION ═══════════════
+function showPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-' + page)?.classList.add('active');
+  const titles = { dashboard: 'Dashboard', customers: 'All Customers', overdue: 'Overdue Accounts', reports: 'Reports' };
+  document.getElementById('page-title').textContent = titles[page] || page;
+  renderPage();
+}
+
+function renderPage() {
+  const area = document.getElementById('content-area');
+  if (currentPage === 'dashboard') area.innerHTML = renderDashboard();
+  else if (currentPage === 'customers') area.innerHTML = renderCustomers();
+  else if (currentPage === 'overdue') area.innerHTML = renderOverdue();
+  else if (currentPage === 'reports') area.innerHTML = renderReports();
+  updateSidebar();
+}
+
+// ═══════════════ SIDEBAR ═══════════════
+function updateSidebar() {
+  const active = db.customers.filter(c => getBalance(c) > 0);
+  const total = active.reduce((s, c) => s + getBalance(c), 0);
+  const overdueCount = active.filter(c => {
+    const lb = lastBorrowDate(c);
+    return lb && daysSince(lb) > 30;
+  }).length;
+  document.getElementById('sidebar-total').textContent = fmt(total);
+  document.getElementById('sidebar-count').textContent = active.length + ' active borrower' + (active.length !== 1 ? 's' : '');
+  const badge = document.getElementById('overdue-badge');
+  badge.textContent = overdueCount;
+  badge.style.display = overdueCount > 0 ? 'inline-block' : 'none';
+}
+
+// ═══════════════ DASHBOARD ═══════════════
+function renderDashboard() {
+  const all = db.customers;
+  const active = all.filter(c => getBalance(c) > 0);
+  const total = active.reduce((s, c) => s + getBalance(c), 0);
+  const overdueList = active.filter(c => { const lb = lastBorrowDate(c); return lb && daysSince(lb) > 30; });
+  const clearedToday = all.filter(c => {
+    const txns = (c.transactions||[]).filter(t => t.type==='payment' && t.date === today());
+    return txns.length > 0;
+  });
+
+  const filtered = searchQuery
+    ? all.filter(c => c.name.toLowerCase().includes(searchQuery) || (c.phone||'').includes(searchQuery))
+    : active.sort((a,b) => getBalance(b) - getBalance(a)).slice(0,10);
+
+  return `
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-card-label">Total outstanding</div>
+      <div class="stat-card-val red">${fmt(total)}</div>
+      <div class="stat-card-note">across ${active.length} customer${active.length!==1?'s':''}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Overdue (30d+)</div>
+      <div class="stat-card-val amber">${overdueList.length}</div>
+      <div class="stat-card-note">${fmt(overdueList.reduce((s,c)=>s+getBalance(c),0))} overdue</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Total customers</div>
+      <div class="stat-card-val green">${all.length}</div>
+      <div class="stat-card-note">${clearedToday.length} paid today</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-title">${searchQuery ? 'Search results' : 'Top borrowers'}</div>
+  </div>
+
+  ${renderCustomerTable(filtered)}
+  `;
+}
+
+// ═══════════════ CUSTOMERS PAGE ═══════════════
+function renderCustomers() {
+  let list = db.customers;
+  if (searchQuery) list = list.filter(c => c.name.toLowerCase().includes(searchQuery) || (c.phone||'').includes(searchQuery));
+  list = list.sort((a,b) => getBalance(b) - getBalance(a));
+  return `
+  <div class="section-header" style="margin-bottom:10px;">
+    <div class="section-title">${list.length} customer${list.length!==1?'s':''}</div>
+  </div>
+  ${renderCustomerTable(list)}
+  `;
+}
+
+// ═══════════════ CUSTOMER TABLE ═══════════════
+function renderCustomerTable(list) {
+  if (!list.length) return `<div class="empty-state"><i class="fa-solid fa-users"></i><p>${searchQuery ? 'No customers match your search.' : 'No customers yet. Add your first customer!'}</p></div>`;
+  const rows = list.map(c => {
+    const bal = getBalance(c);
+    const lb = lastBorrowDate(c);
+    const isOverdue = bal > 0 && lb && daysSince(lb) > 30;
+    const isNew = lb && daysSince(lb) <= 1;
+    const badgeHtml = bal === 0
+      ? `<span class="badge badge-cleared">Cleared</span>`
+      : isOverdue ? `<span class="badge badge-overdue">Overdue</span>`
+      : isNew ? `<span class="badge badge-new">New</span>`
+      : `<span class="badge badge-partial">Active</span>`;
+    const lastStr = lb ? (daysSince(lb) === 0 ? 'Today' : daysSince(lb) === 1 ? 'Yesterday' : daysSince(lb) + 'd ago') : '—';
+    return `
+    <div class="customer-row ${currentCustomerId===c.id?'selected':''}" onclick="openDetail('${c.id}')">
+      <div class="cust-name-cell">
+        <div class="avatar ${avatarClass(c.name)}">${initials(c.name)}</div>
+        <div>
+          <div class="cust-name">${c.name}</div>
+          <div class="cust-phone">${c.phone||'—'}</div>
+        </div>
+      </div>
+      <div class="td">${lastStr}</div>
+      <div class="td">${(c.transactions||[]).length}</div>
+      <div class="td ${bal>0?'red':'green'}">${fmt(bal)}</div>
+      <div class="td">${badgeHtml}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="customer-table">
+    <div class="customer-table-head">
+      <div class="th">Customer</div>
+      <div class="th">Last borrow</div>
+      <div class="th">Entries</div>
+      <div class="th">Balance</div>
+      <div class="th">Status</div>
+    </div>
+    ${rows}
+  </div>`;
+}
+
+// ═══════════════ OVERDUE PAGE ═══════════════
+function renderOverdue() {
+  const overdueList = db.customers
+    .filter(c => { const bal = getBalance(c); const lb = lastBorrowDate(c); return bal > 0 && lb && daysSince(lb) > 30; })
+    .sort((a,b) => getBalance(b) - getBalance(a));
+  if (!overdueList.length) return `<div class="empty-state"><i class="fa-solid fa-circle-check" style="color:var(--accent)"></i><p>No overdue accounts! Great job.</p></div>`;
+  return overdueList.map(c => {
+    const lb = lastBorrowDate(c);
+    return `
+    <div class="overdue-card" onclick="openDetail('${c.id}')">
+      <div class="avatar ${avatarClass(c.name)}" style="width:40px;height:40px;font-size:14px;">${initials(c.name)}</div>
+      <div class="overdue-info">
+        <div class="overdue-name">${c.name}</div>
+        <div class="overdue-days">Last borrow ${daysSince(lb)} days ago &nbsp;•&nbsp; ${c.phone||'No phone'}</div>
+      </div>
+      <div>
+        <div class="overdue-amount">${fmt(getBalance(c))}</div>
+        <button class="btn btn-wa" style="font-size:11px;padding:5px 9px;margin-top:6px;" onclick="event.stopPropagation();sendWhatsAppFor('${c.id}')"><i class="fa-brands fa-whatsapp"></i> Remind</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════ REPORTS PAGE ═══════════════
+function renderReports() {
+  const all = db.customers;
+  const total = all.reduce((s,c)=>s+getBalance(c),0);
+  const totalBorrowed = all.reduce((s,c)=>s+(c.transactions||[]).filter(t=>t.type==='borrow').reduce((x,t)=>x+t.amount,0),0);
+  const totalPaid = all.reduce((s,c)=>s+(c.transactions||[]).filter(t=>t.type==='payment').reduce((x,t)=>x+t.amount,0),0);
+
+  // Monthly breakdown (last 4 months)
+  const monthRows = [];
+  for (let i=0; i<4; i++) {
+    const d = new Date(); d.setMonth(d.getMonth()-i);
+    const ym = d.toISOString().slice(0,7);
+    const label = d.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+    let borrowed=0, paid=0;
+    all.forEach(c=>(c.transactions||[]).forEach(t=>{
+      if(t.date.startsWith(ym)) { if(t.type==='borrow') borrowed+=t.amount; else paid+=t.amount; }
+    }));
+    monthRows.push(`<tr><td style="padding:7px 0;font-size:13px;color:var(--text2);">${label}</td><td style="padding:7px 0;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--red);">${fmt(borrowed)}</td><td style="padding:7px 0;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--accent);">${fmt(paid)}</td></tr>`);
+  }
+
+  // Top 5 debtors
+  const top5 = [...all].sort((a,b)=>getBalance(b)-getBalance(a)).slice(0,5);
+
+  return `
+  <div class="stats-row" style="margin-bottom:16px;">
+    <div class="stat-card"><div class="stat-card-label">Outstanding</div><div class="stat-card-val red">${fmt(total)}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total lent ever</div><div class="stat-card-val amber">${fmt(totalBorrowed)}</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total collected</div><div class="stat-card-val green">${fmt(totalPaid)}</div></div>
+  </div>
+
+  <div class="report-section">
+    <div class="report-title">Monthly summary</div>
+    <table style="width:100%;border-collapse:collapse;">
+      <thead><tr>
+        <th style="text-align:left;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding-bottom:6px;">Month</th>
+        <th style="text-align:left;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding-bottom:6px;">Borrowed</th>
+        <th style="text-align:left;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding-bottom:6px;">Paid back</th>
+      </tr></thead>
+      <tbody>${monthRows.join('')}</tbody>
+    </table>
+  </div>
+
+  <div class="report-section">
+    <div class="report-title">Top 5 borrowers</div>
+    ${top5.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openDetail('${c.id}')">
+      <span style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text3);min-width:18px;">${i+1}.</span>
+      <div class="avatar ${avatarClass(c.name)}" style="width:30px;height:30px;font-size:11px;">${initials(c.name)}</div>
+      <span style="flex:1;font-size:13px;font-weight:500;">${c.name}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:${getBalance(c)>0?'var(--red)':'var(--accent)'};">${fmt(getBalance(c))}</span>
+    </div>`).join('')}
+  </div>
+
+  <div class="report-section">
+    <div class="report-title">Export data</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-ghost" onclick="exportCSV()"><i class="fa-solid fa-download"></i> Download CSV</button>
+      <button class="btn btn-ghost" onclick="window.print()"><i class="fa-solid fa-print"></i> Print report</button>
+    </div>
+  </div>
+  `;
+}
+
+// ═══════════════ DETAIL PANEL ═══════════════
+function openDetail(id) {
+  currentCustomerId = id;
+  const c = db.customers.find(x => x.id === id);
+  if (!c) return;
+  const bal = getBalance(c);
+  document.getElementById('detail-avatar').className = 'detail-avatar ' + avatarClass(c.name);
+  document.getElementById('detail-avatar').textContent = initials(c.name);
+  document.getElementById('detail-name').textContent = c.name;
+  document.getElementById('detail-phone').textContent = c.phone || 'No phone';
+  document.getElementById('detail-address').textContent = c.address || '';
+  document.getElementById('detail-notes').textContent = c.notes ? '📝 ' + c.notes : '';
+  const box = document.getElementById('detail-balance-box');
+  box.className = 'detail-balance' + (bal === 0 ? ' zero' : '');
+  document.getElementById('detail-balance-amount').textContent = fmt(bal);
+
+  // History
+  const txns = [...(c.transactions||[])].sort((a,b)=>b.date.localeCompare(a.date));
+  const histHtml = txns.length === 0
+    ? '<p style="color:var(--text3);font-size:13px;">No transactions yet.</p>'
+    : `<div class="hist-label">Transaction history</div>` + txns.map(t => `
+    <div class="hist-entry">
+      <div class="hist-left">
+        <div class="hist-desc">${t.type==='borrow'?'<i class="fa-solid fa-arrow-down" style="color:var(--red);font-size:11px;"></i>':' <i class="fa-solid fa-arrow-up" style="color:var(--accent);font-size:11px;"></i>'} ${t.desc||( t.type==='borrow'?'Borrow':'Payment')}</div>
+        <div class="hist-date">${fmtDate(t.date)}${t.note?' · '+t.note:''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div class="hist-amt ${t.type}">${t.type==='borrow'?'+':'-'}${fmt(t.amount)}</div>
+        <button class="hist-delete" onclick="deleteTransaction('${id}','${t.id}')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>`).join('');
+  document.getElementById('detail-history').innerHTML = histHtml;
+
+  document.getElementById('detail-overlay').classList.add('open');
+  // re-render table to show selected
+  renderPage();
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  currentCustomerId = null;
+  renderPage();
+}
+
+// ═══════════════ MODALS ═══════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function openAddCustomerModal() {
+  editingCustomerId = null;
+  document.getElementById('modal-customer-title').textContent = 'Add Customer';
+  ['field-name','field-phone','field-address','field-notes'].forEach(f => document.getElementById(f).value='');
+  openModal('modal-customer');
+}
+
+function editCustomer() {
+  const c = db.customers.find(x => x.id === currentCustomerId);
+  if (!c) return;
+  editingCustomerId = c.id;
+  document.getElementById('modal-customer-title').textContent = 'Edit Customer';
+  document.getElementById('field-name').value = c.name;
+  document.getElementById('field-phone').value = c.phone||'';
+  document.getElementById('field-address').value = c.address||'';
+  document.getElementById('field-notes').value = c.notes||'';
+  openModal('modal-customer');
+}
+
+function saveCustomer() {
+  const name = document.getElementById('field-name').value.trim();
+  if (!name) { toast('Name is required.', 'error'); return; }
+const phone = document.getElementById('field-phone').value.trim();
+if (phone && (!/^\d{10}$/.test(phone))) { toast('Phone number must be exactly 10 digits.', 'error'); return; }
+  if (editingCustomerId) {
+    const c = db.customers.find(x => x.id === editingCustomerId);
+    c.name = name;
+    c.phone = document.getElementById('field-phone').value.trim();
+    c.address = document.getElementById('field-address').value.trim();
+    c.notes = document.getElementById('field-notes').value.trim();
+    toast('Customer updated!', 'success');
+  } else {
+    db.customers.push({
+      id: genId(), name,
+      phone: document.getElementById('field-phone').value.trim(),
+      address: document.getElementById('field-address').value.trim(),
+      notes: document.getElementById('field-notes').value.trim(),
+      createdAt: today(),
+      transactions: []
+    });
+    toast('Customer added!', 'success');
+  }
+  saveData(db);
+  closeModal('modal-customer');
+  if (editingCustomerId && currentCustomerId) openDetail(currentCustomerId);
+  else renderPage();
+}
+
+function openBorrowModal() {
+  document.getElementById('borrow-amount').value = '';
+  document.getElementById('borrow-date').value = today();
+  document.getElementById('borrow-desc').value = '';
+  document.getElementById('borrow-note').value = '';
+  openModal('modal-borrow');
+}
+
+function saveBorrow() {
+  const amount = parseFloat(document.getElementById('borrow-amount').value);
+  if (!amount || amount <= 0) { toast('Enter a valid amount.', 'error'); return; }
+  const date = document.getElementById('borrow-date').value || today();
+  const c = db.customers.find(x => x.id === currentCustomerId);
+  c.transactions.push({ id: genId(), type: 'borrow', amount, date, desc: document.getElementById('borrow-desc').value.trim(), note: document.getElementById('borrow-note').value.trim() });
+  saveData(db);
+  closeModal('modal-borrow');
+  toast('Borrow entry added!', 'success');
+  openDetail(currentCustomerId);
+}
+
+function openPaymentModal() {
+  const c = db.customers.find(x => x.id === currentCustomerId);
+  const bal = getBalance(c);
+  document.getElementById('pay-outstanding').value = fmt(bal);
+  document.getElementById('pay-amount').value = '';
+  document.getElementById('pay-date').value = today();
+  document.getElementById('pay-note').value = '';
+  openModal('modal-payment');
+}
+
+function savePayment() {
+  const amount = parseFloat(document.getElementById('pay-amount').value);
+  if (!amount || amount <= 0) { toast('Enter a valid amount.', 'error'); return; }
+  const c = db.customers.find(x => x.id === currentCustomerId);
+  const bal = getBalance(c);
+  if (amount > bal) { toast('Payment exceeds balance!', 'error'); return; }
+  const date = document.getElementById('pay-date').value || today();
+  c.transactions.push({ id: genId(), type: 'payment', amount, date, desc: 'Payment received', note: document.getElementById('pay-note').value.trim() });
+  saveData(db);
+  closeModal('modal-payment');
+  toast('Payment recorded!', 'success');
+  openDetail(currentCustomerId);
+}
+
+function deleteTransaction(custId, txnId) {
+  const c = db.customers.find(x => x.id === custId);
+  c.transactions = c.transactions.filter(t => t.id !== txnId);
+  saveData(db);
+  toast('Entry deleted.', '');
+  openDetail(custId);
+}
+
+function deleteCustomerConfirm() {
+  const c = db.customers.find(x => x.id === currentCustomerId);
+  document.getElementById('confirm-text').textContent = `Delete "${c.name}" and all their records? This cannot be undone.`;
+  document.getElementById('confirm-ok-btn').onclick = () => {
+    db.customers = db.customers.filter(x => x.id !== currentCustomerId);
+    saveData(db);
+    closeModal('modal-confirm');
+    closeDetail();
+    toast('Customer deleted.', '');
+  };
+  openModal('modal-confirm');
+}
+
+// ═══════════════ WHATSAPP ═══════════════
+function sendWhatsApp() { sendWhatsAppFor(currentCustomerId); }
+function sendWhatsAppFor(id) {
+  const c = db.customers.find(x => x.id === id);
+  if (!c || !c.phone) { toast('No phone number saved for this customer.', 'error'); return; }
+  const bal = getBalance(c);
+  const msg = encodeURIComponent(`Namaste ${c.name}! 🙏\n\nYou have an outstanding balance of ${fmt(bal)} at Mama's Store.\n\nPlease pay at your earliest convenience. Thank you! 🛒`);
+  const phone = c.phone.replace(/\D/g,'');
+  window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
+}
+
+// ═══════════════ SEARCH ═══════════════
+function handleSearch(val) {
+  searchQuery = val.toLowerCase().trim();
+  renderPage();
+}
+
+// ═══════════════ EXPORT CSV ═══════════════
+function exportCSV() {
+  const rows = [['Customer', 'Phone', 'Address', 'Balance', 'Date', 'Type', 'Amount', 'Description', 'Note']];
+  db.customers.forEach(c => {
+    const bal = getBalance(c);
+    if ((c.transactions||[]).length === 0) {
+      rows.push([c.name, c.phone||'', c.address||'', bal, '', '', '', '', '']);
+    } else {
+      (c.transactions||[]).forEach(t => rows.push([c.name, c.phone||'', c.address||'', bal, t.date, t.type, t.amount, t.desc||'', t.note||'']));
+    }
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'mamas_store_records.csv'; a.click();
+  toast('CSV downloaded!', 'success');
+}
+
+// ═══════════════ SEED DEMO DATA ═══════════════
+function seedDemoData() {
+  if (db.customers.length > 0) return;
+  const demo = [
+    { name:'Rajan Kumar', phone:'9876543210', address:'Near temple, Ward 4', notes:'Regular customer' },
+    { name:'Savita Patil', phone:'9823456789', address:'Main road', notes:'' },
+    { name:'Mahesh Gupta', phone:'9812345678', address:'Behind school', notes:'Pays on 1st of month' },
+    { name:'Priya Sharma', phone:'9900112233', address:'Market area', notes:'' },
+    { name:'Ajay Nair', phone:'9771234567', address:'Ward 7', notes:'' },
+  ];
+  const txns = [
+    [ {type:'borrow',amount:400,date:'2025-05-23',desc:'Rice, dal',note:''}, {type:'payment',amount:200,date:'2025-05-18',desc:'Payment received',note:'Cash'}, {type:'borrow',amount:800,date:'2025-05-10',desc:'Oil, sugar',note:''}, {type:'payment',amount:200,date:'2025-05-02',desc:'Payment received',note:''} ],
+    [ {type:'borrow',amount:480,date:today(),desc:'Vegetables',note:''} ],
+    [ {type:'borrow',amount:1250,date:'2025-05-15',desc:'Groceries',note:''}, {type:'payment',amount:500,date:'2025-05-25',desc:'Payment received',note:'UPI'} ],
+    [ {type:'borrow',amount:1900,date:'2025-04-10',desc:'Monthly groceries',note:''} ],
+    [ {type:'borrow',amount:600,date:'2025-05-20',desc:'Snacks, biscuits',note:''}, {type:'payment',amount:600,date:'2025-05-22',desc:'Payment received',note:'Full payment'} ],
+  ];
+  demo.forEach((d,i) => {
+    db.customers.push({ id:genId(), ...d, createdAt:'2025-05-01', transactions: txns[i].map(t=>({id:genId(),...t})) });
+  });
+  saveData(db);
+}
+
+// ═══════════════ INIT ═══════════════
+seedDemoData();
+db = loadData();
+showPage('dashboard');
+</script>
+</body>
+</html>
